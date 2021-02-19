@@ -12,3 +12,10 @@ float64[] size
 # homography is from at least the four corners of one member tag and at most the
 # four corners of all member tags.
 geometry_msgs/PoseWithCovarianceStamped pose
+
+# A vector containing the pixel coordinates (x, y) of the corners.
+# <Need to specify the order>
+geometry_msgs/Point[] corners
+
+# Pixel coordinates for the center of the tag
+geometry_msgs/Point center
