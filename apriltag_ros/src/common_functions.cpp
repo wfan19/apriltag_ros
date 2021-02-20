@@ -264,6 +264,22 @@ AprilTagDetectionArray TagDetector::detectTags (
     apriltag_detection_t *detection;
     zarray_get(detections_, i, &detection);
 
+    // Save the tag corner coordinates
+    std::vector<geometry_msgs::Point> corners;
+    for (int i=0; i < 4; i++)
+    {
+      geometry_msgs::Point current_point;
+      current_point.x = (int)detection->p[i][0];
+      current_point.y = (int)detection->p[i][1];
+      
+      corners.push_back(current_point);
+    }
+
+    // Save the center coordinates
+    geometry_msgs::Point center;
+    center.x = (int)detection->c[0];
+    center.y = (int)detection->c[1];
+
     // Bootstrap this for loop to find this tag's description amongst
     // the tag bundles. If found, add its points to the bundle's set of
     // object-image corresponding points (tag corners) for cv::solvePnP.
@@ -346,6 +362,8 @@ AprilTagDetectionArray TagDetector::detectTags (
     tag_detection.pose = tag_pose;
     tag_detection.id.push_back(detection->id);
     tag_detection.size.push_back(tag_size);
+    tag_detection.corners = corners;
+    tag_detection.center = center;
     tag_detection_array.detections.push_back(tag_detection);
     detection_names.push_back(standaloneDescription->frame_name());
   }
